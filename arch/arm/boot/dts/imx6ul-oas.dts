@@ -91,6 +91,12 @@
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_i2c3>;
     status = "okay";
+
+    at24@50 {
+        compatible = "at24,24c16";
+        pagesize = <16>;
+        reg = <0x50>;
+    };
 };
 
 &sai3 {
