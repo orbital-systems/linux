@@ -29,6 +29,7 @@
 #include "../codecs/wm8960.h"
 
 #define CS427x_SYSCLK_MCLK 0
+#define TLV320AIC31xx_SYSCLK_MCLK 0
 
 #define RX 0
 #define TX 1
@@ -562,6 +563,10 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
 		codec_dai_name = "ac97-hifi";
 		priv->card.set_bias_level = NULL;
 		priv->dai_fmt = SND_SOC_DAIFMT_AC97;
+	} else if (of_device_is_compatible(np, "fsl,imx-audio-tlv320aic31xx")) {
+		codec_dai_name = "tlv320aic31xx-hifi";
+		priv->codec_priv.mclk_id = TLV320AIC31xx_SYSCLK_MCLK;
+		priv->dai_fmt = SND_SOC_DAIFMT_CBM_CFM;
 	} else {
 		dev_err(&pdev->dev, "unknown Device Tree compatible\n");
 		ret = -EINVAL;
@@ -703,6 +708,7 @@ static const struct of_device_id fsl_asoc_card_dt_ids[] = {
 	{ .compatible = "fsl,imx-audio-sgtl5000", },
 	{ .compatible = "fsl,imx-audio-wm8962", },
 	{ .compatible = "fsl,imx-audio-wm8960", },
+	{ .compatible = "fsl,imx-audio-tlv320aic31xx" },
 	{}
 };
 MODULE_DEVICE_TABLE(of, fsl_asoc_card_dt_ids);
