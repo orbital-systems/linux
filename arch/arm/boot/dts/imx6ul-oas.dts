@@ -18,6 +18,29 @@
 
     // Add here your compatible platform.
     compatible = "digi,ccimx6ul", "fsl,imx6ul";
+
+
+    sound_tlv320aic3111: sound-tlv320aic3111 {
+        compatible = "fsl,imx-audio-tlv320aic31xx";
+        model = "imx-tlv320aic31xx";
+        audio-cpu = <&sai3>;
+        audio-codec = <&tlv320aic3111>;
+        audio-asrc = <&asrc>;
+        audio-routing =
+            "Headphone Jack", "HPL",
+            "Headphone Jack", "HPR",
+            "Ext Spk", "SPKL",
+            "Ext Spk", "SPKR",
+            "LineOut", "RECL",
+            "LineOut", "RECR",
+            "Mic1", "MIC1",
+            "Mic2", "MIC2",
+            "LineInA", "INA1",
+            "LineInA", "INA2",
+            "LineInB", "INB1",
+            "LineInB", "INB2";
+        status = "okay";
+    };
 };
 
 &can1 {
@@ -84,6 +107,21 @@
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_i2c2>;
     status = "okay";
+
+    tlv320aic3111: tlv320aic3111@18 {
+        #sound-dai-cells = <0>;
+        compatible = "ti,tlv320aic3111";
+        reg = <0x18>;
+        status = "okay";
+
+        /* Regulators */
+        HPVDD-supply = <&ext_3v3>; /* v3_3AUD -> V3_3D -> DCDC4 */
+        SPRVDD-supply = <&ext_3v3>; /* vbat */
+        SPLVDD-supply = <&ext_3v3>; /* vbat */
+        AVDD-supply = <&ext_3v3>; /* v3_3AUD -> V3_3D -> DCDC4 */
+        IOVDD-supply = <&ext_3v3>; /* V3_3D -> DCDC4 */
+        DVDD-supply = <&ldo2_ext>; /* V1_8AUD -> V1_8D -> LDO1 */
+    };
 };
 
 &i2c3 {
