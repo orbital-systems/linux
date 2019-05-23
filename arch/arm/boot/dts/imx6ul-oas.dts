@@ -19,28 +19,6 @@
     // Add here your compatible platform.
     compatible = "digi,ccimx6ul", "fsl,imx6ul";
 
-
-    sound_tlv320aic3111: sound-tlv320aic3111 {
-        compatible = "fsl,imx-audio-tlv320aic31xx";
-        model = "imx-tlv320aic31xx";
-        audio-cpu = <&sai3>;
-        audio-codec = <&tlv320aic3111>;
-        audio-asrc = <&asrc>;
-        audio-routing =
-            "Headphone Jack", "HPL",
-            "Headphone Jack", "HPR",
-            "Ext Spk", "SPKL",
-            "Ext Spk", "SPKR",
-            "LineOut", "RECL",
-            "LineOut", "RECR",
-            "Mic1", "MIC1",
-            "Mic2", "MIC2",
-            "LineInA", "INA1",
-            "LineInA", "INA2",
-            "LineInB", "INB1",
-            "LineInB", "INB2";
-        status = "okay";
-    };
 };
 
 &can1 {
@@ -94,21 +72,6 @@
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_i2c2>;
     status = "okay";
-
-    tlv320aic3111: tlv320aic3111@18 {
-        #sound-dai-cells = <0>;
-        compatible = "ti,tlv320aic3111";
-        reg = <0x18>;
-        status = "okay";
-
-        /* Regulators */
-        HPVDD-supply = <&ext_3v3>; /* v3_3AUD -> V3_3D -> DCDC4 */
-        SPRVDD-supply = <&ext_3v3>; /* vbat */
-        SPLVDD-supply = <&ext_3v3>; /* vbat */
-        AVDD-supply = <&ext_3v3>; /* v3_3AUD -> V3_3D -> DCDC4 */
-        IOVDD-supply = <&ext_3v3>; /* V3_3D -> DCDC4 */
-        DVDD-supply = <&ldo2_ext>; /* V1_8AUD -> V1_8D -> LDO1 */
-    };
 };
 
 &i2c3 {
@@ -122,12 +85,6 @@
         pagesize = <16>;
         reg = <0x50>;
     };
-};
-
-&sai3 {
-    pinctrl-names = "default";
-    pinctrl-0 = <&pinctrl_sai3>;
-    status = "okay";
 };
 
 &uart2 {
@@ -292,17 +249,6 @@
             fsl,pins = <
                 MX6UL_PAD_LCD_DATA01__I2C3_SCL		0x4001b8b0
                 MX6UL_PAD_LCD_DATA00__I2C3_SDA		0x4001b8b0
-            >;
-        };
-
-        pinctrl_sai3: sai3grp {
-            fsl,pins = <
-                MX6UL_PAD_LCD_CLK__SAI3_MCLK		0x17088
-                MX6UL_PAD_LCD_DATA11__SAI3_RX_BCLK		0x1b030
-                MX6UL_PAD_LCD_DATA14__SAI3_RX_DATA		0x11088
-                MX6UL_PAD_LCD_DATA13__SAI3_TX_BCLK		0x17088
-                MX6UL_PAD_LCD_DATA15__SAI3_TX_DATA		0x11088
-                MX6UL_PAD_LCD_ENABLE__SAI3_TX_SYNC		0x17088
             >;
         };
 
