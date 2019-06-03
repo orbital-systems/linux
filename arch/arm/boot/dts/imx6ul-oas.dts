@@ -112,24 +112,8 @@
 
 &usbotg2 {
     dr_mode = "host";
-
-    /*
-     * Set the proper voltage regulator to power the
-     * vbus if needed.
-     */
-    //vbus-supply = <&reg_usb_otg1_vbus>;
-
-    /*
-     * Configure the power line if needed.
-     */
-    //fsl,power-line-polarity-active-high;
-
-    /*
-     * Configure the overcurrent line if needed.
-     */
-    //fsl,over-current-polarity-active-low;
-    //disable-over-current;
-    pinctrl-0 = <&pinctrl_usbotg2>;
+    digi,power-line-active-high;
+    disable-over-current;
     status = "okay";
 };
 
@@ -256,12 +240,6 @@
             fsl,pins = <
                 MX6UL_PAD_UART2_RX_DATA__UART2_DCE_RX		0x1b0b1
                 MX6UL_PAD_UART2_TX_DATA__UART2_DCE_TX		0x1b0b1
-            >;
-        };
-
-        pinctrl_usbotg2: usbotg2grp {
-            fsl,pins = <
-                MX6UL_PAD_GPIO1_IO02__USB_OTG2_PWR		0x17059
             >;
         };
 
