@@ -85,48 +85,6 @@
         pagesize = <16>;
         reg = <0x50>;
     };
-
-    at24@51 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x51>;
-    };
-
-    at24@52 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x52>;
-    };
-
-    at24@53 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x53>;
-    };
-
-    at24@54 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x54>;
-    };
-
-    at24@55 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x55>;
-    };
-
-    at24@56 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x56>;
-    };
-
-    at24@57 {
-        compatible = "at24,24c16";
-        pagesize = <16>;
-        reg = <0x57>;
-    };
 };
 
 &uart2 {
