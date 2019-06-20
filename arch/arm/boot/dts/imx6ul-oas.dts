@@ -19,6 +19,28 @@
     // Add here your compatible platform.
     compatible = "digi,ccimx6ul", "fsl,imx6ul";
 
+    sound_max98089: sound-max98089 {
+		compatible = "fsl,imx-audio-max98088";
+		model = "imx-max98088";
+		cpu-dai = <&sai3>;
+		audio-codec = <&max98089>;
+		asrc-controller = <&asrc>;
+		gpr = <&gpr>;
+		audio-routing =
+			"Headphone Jack", "HPL",
+			"Headphone Jack", "HPR",
+			"Ext Spk", "SPKL",
+			"Ext Spk", "SPKR",
+			"LineOut", "RECL",
+			"LineOut", "RECR",
+			"Mic1", "MIC1",
+			"Mic2", "MIC2",
+			"LineInA", "INA1",
+			"LineInA", "INA2",
+			"LineInB", "INB1",
+			"LineInB", "INB2";
+		status = "okay";
+	};
 };
 
 &can1 {
@@ -72,6 +94,16 @@
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_i2c2>;
     status = "okay";
+
+    max98089: codec@10 {
+        compatible = "maxim,max98089";
+        reg = <0x10>;
+        clocks = <&clks IMX6UL_CLK_SAI3>;
+        clock-names = "mclk";
+        interrupt-parent = <&gpio5>;
+        interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
+        status = "okay";
+    };
 };
 
 &i2c3 {
@@ -97,6 +129,18 @@
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_console>;
     status = "okay";
+};
+
+/* SAI3 */
+&sai3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sai3>;
+	assigned-clocks = <&clks IMX6UL_CLK_SAI3_SEL>,
+			  <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>,
+			  <&clks IMX6UL_CLK_SAI3>;
+	assigned-clock-rates = <0>, <786432000>, <12288000>;
+	assigned-clock-parents = <&clks IMX6UL_CLK_PLL4_AUDIO_DIV>;
+	status = "okay";
 };
 
 &usbotg1 {
@@ -126,6 +170,11 @@
     pinctrl-0 = <&pinctrl_usdhc2>;
     no-1-8-v;
     status = "okay";
+};
+
+/* Audio chip */
+&max98089 {
+	status = "okay";
 };
 
 &iomuxc {
@@ -251,6 +300,18 @@
                 MX6UL_PAD_CSI_DATA01__USDHC2_DATA1		0x17059
                 MX6UL_PAD_CSI_DATA02__USDHC2_DATA2		0x17059
                 MX6UL_PAD_CSI_DATA03__USDHC2_DATA3		0x17059
+            >;
+        };
+
+        pinctrl_sai3: sai3grp {
+            fsl,pins = <
+                MX6UL_PAD_LCD_DATA15__SAI3_TX_DATA	0x11088
+                MX6UL_PAD_LCD_DATA14__SAI3_RX_DATA	0x11088
+                MX6UL_PAD_LCD_CLK__SAI3_MCLK		0x17088
+                MX6UL_PAD_LCD_DATA13__SAI3_TX_BCLK	0x17088
+                MX6UL_PAD_LCD_ENABLE__SAI3_TX_SYNC	0x17088
+                /* Interrupt */
+                MX6UL_PAD_SNVS_TAMPER5__GPIO5_IO05	0x80000000
             >;
         };
     };
