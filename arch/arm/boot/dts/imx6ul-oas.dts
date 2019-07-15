@@ -41,6 +41,17 @@
 			"LineInB", "INB2";
 		status = "okay";
 	};
+
+	reg_usb_otg2_vbus: reg_usb_otg2@0 {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_usb_otg2_vbus>;
+		regulator-name = "usb_otg2_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 2 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
 };
 
 &can1 {
@@ -159,6 +170,7 @@
     dr_mode = "host";
     digi,power-line-active-high;
     disable-over-current;
+    vbus-supply = <&reg_usb_otg2_vbus>;
     status = "okay";
 };
 
@@ -313,6 +325,12 @@
                 MX6UL_PAD_LCD_ENABLE__SAI3_TX_SYNC	0x17088
                 /* Interrupt */
                 MX6UL_PAD_SNVS_TAMPER5__GPIO5_IO05	0x80000000
+            >;
+        };
+
+        pinctrl_usb_otg2_vbus: usbotg2vbusgrp {
+            fsl,pins = <
+                MX6UL_PAD_GPIO1_IO02__GPIO1_IO02    0x10b0
             >;
         };
     };
