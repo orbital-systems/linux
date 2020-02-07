@@ -52,6 +52,50 @@
 		gpio = <&gpio1 2 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
+
+	leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_gpio_leds>;
+
+		LED1 {
+			gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			linux,default-trigger = "can0-rx";
+		};
+
+		LED2 {
+			gpios = <&gpio3 8 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+
+		LED3 { // Controlled by hlp_main
+			gpios = <&gpio3 9 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+
+		p1_running {
+			gpios = <&gpio3 10 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			linux,default-trigger = "heartbeat";
+		};
+
+		p2_running {
+			gpios = <&gpio3 11 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+
+		booting {
+			gpios = <&gpio3 12 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+		};
+
+		err_fallback {
+			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+			linux,default-trigger = "panic";
+		};
+	};
 };
 
 &can1 {
@@ -331,6 +375,18 @@
         pinctrl_usb_otg2_vbus: usbotg2vbusgrp {
             fsl,pins = <
                 MX6UL_PAD_GPIO1_IO02__GPIO1_IO02    0x10b0
+            >;
+        };
+
+        pinctrl_gpio_leds: gpio_leds {
+            fsl,pins = <
+                MX6UL_PAD_LCD_DATA02__GPIO3_IO07		0x10b0		/* LED1 */
+                MX6UL_PAD_LCD_DATA03__GPIO3_IO08		0x10b0		/* LED2 */
+                MX6UL_PAD_LCD_DATA04__GPIO3_IO09		0x10b0		/* LED3 */
+                MX6UL_PAD_LCD_DATA05__GPIO3_IO10		0x10b0		/* P1_running */
+                MX6UL_PAD_LCD_DATA06__GPIO3_IO11		0x10b0		/* P2_running */
+                MX6UL_PAD_LCD_DATA07__GPIO3_IO12		0x10b0		/* Booting */
+                MX6UL_PAD_LCD_DATA11__GPIO3_IO16		0x10b0		/* Err_fallback */
             >;
         };
     };
