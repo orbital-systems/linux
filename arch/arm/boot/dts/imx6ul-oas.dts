@@ -117,6 +117,12 @@
                       "","","","","","","","", // GPIO4_IO08-GPIO4_IO15
                       "","","","I2C1.SDA","I2C1.SCL","microSD.DATA0","microSD.DATA1","microSD.DATA2",               // GPIO4_IO16-GPIO4_IO23
                       "microSD.DATA3","","","POWER_AMP_CTRL","","","","";                                           // GPIO4_IO24-GPIO4_IO31
+
+    audio_amp_control {
+        gpio-hog;
+        gpios = <27 GPIO_ACTIVE_HIGH>;
+        output-high; // High = Disable audio amplifier
+    };
 };
 
 &can1 {
