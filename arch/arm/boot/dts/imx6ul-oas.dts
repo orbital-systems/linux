@@ -98,6 +98,27 @@
 	};
 };
 
+&gpio1 {
+    gpio-line-names = "USB_OTG1_ID","USB_OTG1_OC","USB_HOST_VBUS_ext_ENABLE","HLP_FW_RST_OPU","USB_OTG1_PWR","HLP_FW_RST_CSP","ETH_MDIO","ETH_MDC", // GPIO1_IO00-GPIO1_IO07
+                      "HLP_FW_RST_SUT","HLP_DISCONNECT_SUT","JTAG_MOD","JTAG_TMS","JTAG_TDO","JTAG_TDI","JTAG_TCK","JTAG_TRST_B",                   // GPIO1_IO08-GPIO1_IO15
+                      "","","","","UART2_TX","UART2_RX","USB_HOST_ext_OC_FLAG","HLP_FW_RST_EXTCAN",                                                 // GPIO1_IO16-GPIO1_IO23
+                      "","","","","","","UART5_TX","UART5_RX";                                                                                      // GPIO1_IO24-GPIO1_IO31
+};
+
+&gpio3 {
+    gpio-line-names = "AUDIO.MCLK","AUDIO.TX_SYNC","DSUB_GPIO11","DSUB_GPIO12","","I2C2_SDA","I2C2_SCL","LED_1",    // GPIO3_IO00-GPIO3_IO07
+                      "LED_2","LED_3","P1_running","P2_running","booting","","","",                                 // GPIO3_IO08-GPIO3_IO15
+                      "","","AUDIO.TX_BCLK","AUDIO.RX_DATA","AUDIO.TX_DATA","","microSD.SD_DET","microSD.CMD",      // GPIO3_IO16-GPIO3_IO23
+                      "microSD.CLK","","HLP_ISO_GPIO_SPARE","HLP_I2C_MUTEX","CSP_I2C_MUTEX","","","";               // GPIO3_IO24-GPIO3_IO31
+};
+
+&gpio4 {
+    gpio-line-names = "","","","","","","","", // GPIO4_IO00-GPIO4_IO07
+                      "","","","","","","","", // GPIO4_IO08-GPIO4_IO15
+                      "","","","I2C1.SDA","I2C1.SCL","microSD.DATA0","microSD.DATA1","microSD.DATA2",               // GPIO4_IO16-GPIO4_IO23
+                      "microSD.DATA3","","","POWER_AMP_CTRL","","","","";                                           // GPIO4_IO24-GPIO4_IO31
+};
+
 &can1 {
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_flexcan1>;
@@ -283,48 +304,37 @@
 
         pinctrl_hog: hoggrp {
             fsl,pins = <
-                /* gpio_id_0 */
-                MX6UL_PAD_GPIO1_IO05__GPIO1_IO05		0x10b0
-                /* gpio_id_1 */
-                MX6UL_PAD_GPIO1_IO08__GPIO1_IO08		0x10b0
-                /* gpio_id_2 */
-                MX6UL_PAD_GPIO1_IO09__GPIO1_IO09		0x10b0
-                /* gpio_id_3 */
-                MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01		0x10b0
-                /* gpio_id_4 */
-                MX6UL_PAD_SNVS_TAMPER2__GPIO5_IO02		0x10b0
-                /* gpio_id_5 */
-                MX6UL_PAD_SNVS_TAMPER5__GPIO5_IO05		0x10b0
-                /* gpio_id_6 */
-                MX6UL_PAD_SNVS_TAMPER6__GPIO5_IO06		0x10b0
-                /* gpio_id_7 */
-                MX6UL_PAD_SNVS_TAMPER7__GPIO5_IO07		0x10b0
-                /* gpio_id_8 */
-                MX6UL_PAD_SNVS_TAMPER8__GPIO5_IO08		0x10b0
-                /* gpio_id_9 */
-                MX6UL_PAD_GPIO1_IO03__GPIO1_IO03		0x10b0
-                /* gpio_id_10 */
-                MX6UL_PAD_LCD_DATA21__GPIO3_IO26		0x10b0
-                /* gpio_id_11 */
+                /* GPIO muxed GPIO1 pins */
                 MX6UL_PAD_GPIO1_IO00__GPIO1_IO00		0x10b0
-                /* gpio_id_12 */
                 MX6UL_PAD_GPIO1_IO01__GPIO1_IO01		0x10b0
-                /* gpio_id_13 */
+                MX6UL_PAD_GPIO1_IO03__GPIO1_IO03		0x10b0
                 MX6UL_PAD_GPIO1_IO04__GPIO1_IO04		0x10b0
-                /* gpio_id_14 */
-                MX6UL_PAD_JTAG_MOD__GPIO1_IO10		0x10b0
-                /* gpio_id_15 */
-                MX6UL_PAD_JTAG_TMS__GPIO1_IO11		0x10b0
-                /* gpio_id_16 */
-                MX6UL_PAD_JTAG_TDO__GPIO1_IO12		0x10b0
-                /* gpio_id_17 */
-                MX6UL_PAD_JTAG_TDI__GPIO1_IO13		0x10b0
-                /* gpio_id_18 */
-                MX6UL_PAD_JTAG_TCK__GPIO1_IO14		0x10b0
-                /* gpio_id_19 */
+                MX6UL_PAD_GPIO1_IO05__GPIO1_IO05		0x10b0
+                MX6UL_PAD_GPIO1_IO08__GPIO1_IO08		0x10b0
+                MX6UL_PAD_GPIO1_IO09__GPIO1_IO09		0x10b0
+                MX6UL_PAD_JTAG_MOD__GPIO1_IO10		    0x10b0
+                MX6UL_PAD_JTAG_TMS__GPIO1_IO11		    0x10b0
+                MX6UL_PAD_JTAG_TDO__GPIO1_IO12		    0x10b0
+                MX6UL_PAD_JTAG_TDI__GPIO1_IO13		    0x10b0
+                MX6UL_PAD_JTAG_TCK__GPIO1_IO14		    0x10b0
                 MX6UL_PAD_JTAG_TRST_B__GPIO1_IO15		0x10b0
-                /* gpio_id_20 */
                 MX6UL_PAD_UART2_CTS_B__GPIO1_IO22		0x10b0
+                MX6UL_PAD_UART2_RTS_B__GPIO1_IO23       0x10b0
+                /* GPIO muxed GPIO3 pins */
+                MX6UL_PAD_LCD_HSYNC__GPIO3_IO02		    0x10b0
+                MX6UL_PAD_LCD_VSYNC__GPIO3_IO03		    0x10b0
+                MX6UL_PAD_LCD_DATA20__GPIO3_IO25		0x10b0
+                MX6UL_PAD_LCD_DATA21__GPIO3_IO26		0x10b0
+                MX6UL_PAD_LCD_DATA22__GPIO3_IO27		0x10b0
+                /* GPIO muxed GPIO4 pins */
+                MX6UL_PAD_CSI_DATA06__GPIO4_IO27		0x10b0
+                /* GPIO muxed GPIO5 pins */
+                MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01		0x10b0
+                MX6UL_PAD_SNVS_TAMPER2__GPIO5_IO02		0x10b0
+                MX6UL_PAD_SNVS_TAMPER5__GPIO5_IO05		0x10b0
+                MX6UL_PAD_SNVS_TAMPER6__GPIO5_IO06		0x10b0
+                MX6UL_PAD_SNVS_TAMPER7__GPIO5_IO07		0x10b0
+                MX6UL_PAD_SNVS_TAMPER8__GPIO5_IO08		0x10b0
             >;
         };
 
