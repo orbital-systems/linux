@@ -125,6 +125,13 @@
     };
 };
 
+/* Coin cell charging */
+&vcoin_chg {
+    regulator-min-microvolt = <2800000>;
+    regulator-max-microvolt = <2800000>;
+    regulator-always-on;
+};
+
 &can1 {
     pinctrl-names = "default";
     pinctrl-0 = <&pinctrl_flexcan1>;
