@@ -69,6 +69,10 @@ struct can_priv {
 	struct led_trigger *rxtx_led_trig;
 	char rxtx_led_trig_name[CAN_LED_NAME_SZ];
 #endif
+
+#ifdef CONFIG_DEBUG_FS
+	struct dentry *debugfs_root;
+#endif
 };
 
 /*

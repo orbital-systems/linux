@@ -19,6 +19,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/slab.h>
+#include <linux/debugfs.h>
 #include <linux/netdevice.h>
 #include <linux/if_arp.h>
 #include <linux/workqueue.h>
@@ -1068,13 +1069,83 @@ static struct rtnl_link_ops can_link_ops __read_mostly = {
 	.fill_xstats	= can_fill_xstats,
 };
 
+#ifdef CONFIG_DEBUG_FS
+static int can_debugfs_bus_off_inject(void *data, u64 val)
+{
+	struct net_device *dev = (struct net_device *)data;
+	struct can_priv *priv = netdev_priv(dev);
+	struct net_device_stats *stats = &dev->stats;
+	struct sk_buff *skb;
+	struct can_frame *cf;
+
+	if (priv->state == CAN_STATE_BUS_OFF)
+		return -EINVAL;
+
+	skb = alloc_can_err_skb(dev, &cf);
+	if (!skb)
+		return -ENOMEM;
+
+	netdev_info(dev, "injecting bus-off error frame\n");
+
+	cf->can_id |= CAN_ERR_BUSOFF;
+	priv->state = CAN_STATE_BUS_OFF;
+	priv->can_stats.bus_off++;
+	can_bus_off(dev);
+
+	stats->rx_packets++;
+	stats->rx_bytes += cf->can_dlc;
+	netif_rx(skb);
+
+	return 0;
+}
+
+DEFINE_SIMPLE_ATTRIBUTE(can_debugfs_bus_off_fops, NULL,
+			can_debugfs_bus_off_inject, "%llu\n");
+
+static void can_debugfs_create(struct net_device *dev)
+{
+	struct can_priv *priv = netdev_priv(dev);
+
+	netdev_info(dev, "creating debugfs dir: %s\n", dev->name);
+	priv->debugfs_root = debugfs_create_dir(dev->name, NULL);
+	if (!priv->debugfs_root)
+		goto err_root;
+
+	if (debugfs_create_file("inject_bus_off", S_IWUSR, priv->debugfs_root,
+				dev, &can_debugfs_bus_off_fops) == NULL)
+		goto err_node;
+	return;
+
+err_node:
+	debugfs_remove_recursive(priv->debugfs_root);
+	priv->debugfs_root = NULL;
+err_root:
+	netdev_err(dev, "failed to initialize debugfs\n");
+}
+
+static void can_debugfs_remove(struct net_device *dev)
+{
+	struct can_priv *priv = netdev_priv(dev);
+
+	debugfs_remove_recursive(priv->debugfs_root);
+}
+#endif
+
 /*
  * Register the CAN network device
  */
 int register_candev(struct net_device *dev)
 {
+	int err;
+
 	dev->rtnl_link_ops = &can_link_ops;
-	return register_netdev(dev);
+	err = register_netdev(dev);
+	if (err)
+		return err;
+#ifdef CONFIG_DEBUG_FS
+	can_debugfs_create(dev);
+#endif
+	return 0;
 }
 EXPORT_SYMBOL_GPL(register_candev);
 
@@ -1083,6 +1154,9 @@ EXPORT_SYMBOL_GPL(register_candev);
  */
 void unregister_candev(struct net_device *dev)
 {
+#ifdef CONFIG_DEBUG_FS
+	can_debugfs_remove(dev);
+#endif
 	unregister_netdev(dev);
 }
 EXPORT_SYMBOL_GPL(unregister_candev);
